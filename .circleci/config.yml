@@ -6,13 +6,14 @@ jobs:
       - image: tr3mo89/udacity-project4:1.0.0
     steps:
       - checkout
-      - echo "build_frontend"
+      - run: echo "build frontend"
+  
   build_backend:
     docker:
       - image: tr3mo89/udacity-project4:1.0.0
     steps:
       - checkout
-      - echo "build_frontend"
+      - run: echo "build_frontend"
 
 workflows:
   application-pipeline:
