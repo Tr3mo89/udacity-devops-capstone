@@ -57,7 +57,7 @@ jobs:
       - image: docker:20.10.11-alpine3.14
     steps:
       - checkout
-      - install-docker
+      #- install-docker
       - run:
           name: install lint
           command: |
@@ -74,7 +74,7 @@ jobs:
       - image: docker:20.10.11-alpine3.14
     steps:
       - checkout
-      - install-docker
+     # - install-docker
       - run:
           name: set dockerpath
           command: |
