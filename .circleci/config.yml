@@ -39,6 +39,12 @@ jobs:
     steps:
       - checkout
       - install-dependencies
+      - run:
+          name: install lint
+          command: |
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+            chmod +x /bin/hadolint
+            hadolint --version
       - run: 
           name: lint the dockerfile
           command: |
@@ -48,7 +54,7 @@ jobs:
   
   build_image:
     docker:
-      - image: ubuntu:20.04
+      - image: docker:20.10.11-alpine3.14
     steps:
       - checkout
       - install-docker
@@ -65,7 +71,7 @@ jobs:
   
   push_image:
     docker:
-      - image: python:3.7.3-stretch
+      - image: docker:20.10.11-alpine3.14
     steps:
       - checkout
       - install-docker
@@ -88,6 +94,6 @@ workflows:
     jobs:
       - linting
       - build_image #:
-          #requires: [linting]
+          #requires: [linting]  #### increase deployment speed
       - push_image:
           requires: [build_image]
