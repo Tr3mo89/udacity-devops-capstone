@@ -15,6 +15,7 @@ jobs:
           name: lint the dockerfile
           command: |
             pwd
+            ls -la
             cd ..
             pwd
             ls -la
