@@ -16,9 +16,6 @@ jobs:
           command: |
             pwd
             ls -la
-            cd ..
-            pwd
-            ls -la
             make lint
   
   build_image:
