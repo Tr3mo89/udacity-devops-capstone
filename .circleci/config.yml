@@ -1,22 +1,56 @@
 version: 2.1
 
 jobs:
-  build_frontend:
+  linting:
     docker:
-      - image: tr3mo89/udacity-project4:1.0.0
+      - image: python:3.7.3-stretch
     steps:
       - checkout
-      - run: echo "build frontend"
+      - run:
+          name: install lint
+          command: |
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+            chmod +x /bin/hadolint
+      - run: 
+          name: lint the dockerfile
+          command: |
+            make lint
   
-  build_backend:
+  build_image:
     docker:
-      - image: tr3mo89/udacity-project4:1.0.0
+      - image: python:3.7.3-stretch
     steps:
       - checkout
-      - run: echo "build_frontend"
+      - run: 
+          name: build image
+          command: |
+            docker build -t udacity/flask:latest ..
+  
+  
+  push_image:
+    docker:
+      - image: python:3.7.3-stretch
+    steps:
+      - checkout
+      - run:
+          name: set dockerpath
+          command: |
+            dockerpath="tr3mo89/udacity-capstone"
+      - run: 
+          name: tag_image
+          command: |
+            docker tag udacity/flask:latest $dockerpath:latest
+      - run:
+          name: push image
+          command: |
+            docker push $dockerpath
+
 
 workflows:
   application-pipeline:
     jobs:
-      - build_frontend
-      - build_backend
+      - linting
+      - build_image:
+          requires: [linting]
+      - push_image:
+          requires: [build_image]
