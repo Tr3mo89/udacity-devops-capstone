@@ -16,6 +16,7 @@ commands:
       - run:
           name: install docker
           command: |
+            DEBIAN_FRONTEND=noninteractive
             apt-get update
             apt-get install -y \
               ca-certificates \
