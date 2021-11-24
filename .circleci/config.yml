@@ -53,10 +53,10 @@ jobs:
   
   build_image:
     docker:
-      - image: docker:20.10.11-alpine3.14
+      - image: ubuntu:20.04
     steps:
       - checkout
-      #- install-docker
+      - install-docker
       - run: 
           name: build image
           command: |
@@ -66,10 +66,10 @@ jobs:
   
   push_image:
     docker:
-      - image: docker:20.10.11-alpine3.14
+      - image: ubuntu:20.04
     steps:
       - checkout
-     # - install-docker
+      - install-docker
       - run:
           name: set dockerpath
           command: |
