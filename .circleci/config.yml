@@ -56,7 +56,7 @@ jobs:
       - image: tr3mo89/ubuntu-20.04-docker:latest
     steps:
       - checkout
-      - install-docker
+      #- install-docker
       - run: 
           name: build image
           command: |
@@ -69,7 +69,7 @@ jobs:
       - image: tr3mo89/ubuntu-20.04-docker:latest
     steps:
       - checkout
-      - install-docker
+      #- install-docker
       - run:
           name: set dockerpath
           command: |
