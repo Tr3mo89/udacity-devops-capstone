@@ -1,11 +1,21 @@
 version: 2.1
 
+commands:
+  install-dependencies:
+    description: install dependencies
+    steps:
+      - run:
+          name: install dependencies
+          command: |
+            make install
+
 jobs:
   linting:
     docker:
       - image: python:3.7.3-stretch
     steps:
       - checkout
+      - install-dependencies
       - run:
           name: install lint
           command: |
