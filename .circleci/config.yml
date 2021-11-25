@@ -77,9 +77,11 @@ jobs:
           name: set dockerpath
           command: |
             export dockerpath="tr3mo89/udacity-capstone"
+            echo $dockerpath
       - run: 
           name: build image
           command: |
+            echo "dockerpath: " $dockerpath
             docker build -t $dockerpath:latest .
       - run: 
           name: tag image
