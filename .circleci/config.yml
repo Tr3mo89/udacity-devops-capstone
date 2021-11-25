@@ -53,14 +53,21 @@ jobs:
   
   build_image:
     docker:
-      - image: circleci/docker@1.7.0
+      - image: tr3mo89/ubuntu-20.04-docker:latest
     steps:
       - checkout
       #- install-docker
+      - run:
+          name: start docker daemon
+          command: |
+            systemct daemon-reload
+            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
+            systemctl restart docker
+            systemctl status docker
+            docker --version
       - run: 
           name: build image
           command: |
-            dockerd
             docker build -t udacity/flask:latest .
   
   
@@ -76,7 +83,12 @@ jobs:
             dockerpath="tr3mo89/udacity-capstone"
       - run:
           name: start docker daemon
-          command: dockerd
+          command: |
+            systemct daemon-reload
+            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
+            systemctl restart docker
+            systemctl status docker
+            docker --version
       - run: 
           name: tag_image
           command: |
