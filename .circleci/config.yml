@@ -66,46 +66,32 @@ jobs:
             ls -la
             make lint
   
-  build_image:
+  handle_docker_image:
     docker:
       - image: tr3mo89/ubuntu-20.04-docker
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.13
-      - run: 
-          name: build image
-          command: |
-            docker build -t udacity/flask:latest .
-  
-  
-  push_image:
-    docker:
-      - image: cimg/python:3.8.11
-    steps:
-      - checkout
-      #- install-docker
-      - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.7
       - run:
           name: set dockerpath
           command: |
             dockerpath="tr3mo89/udacity-capstone"
       - run: 
-          name: tag_image
+          name: build image
           command: |
-            docker tag udacity/flask:latest $dockerpath:latest
+            docker build -t $dockerpath:latest .
+      - run: 
+          name: tag image
+          command: |
+            docker tag $dockerpath:latest $dockerpath:latest
       - run:
           name: push image
           command: |
-            docker push $dockerpath
-
+            docker push $dockerpath:latest
 
 workflows:
   application-pipeline:
     jobs:
       - linting
-      - build_image #:
-          #requires: [linting]  #### increase deployment speed
-      - push_image #:
-          # requires: [build_image]
+      - handle_docker_image
