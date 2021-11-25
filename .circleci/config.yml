@@ -82,15 +82,15 @@ jobs:
           name: build image
           command: |
             echo "dockerpath: " $dockerpath
-            docker build -t $dockerpath:latest .
+            docker build -t tr3mo89/udacity-capstone:latest .
       - run: 
           name: tag image
           command: |
-            docker tag $dockerpath:latest $dockerpath:latest
+            docker tag tr3mo89/udacity-capstone:latest tr3mo89/udacity-capstone:latest
       - run:
           name: push image
           command: |
-            docker push $dockerpath:latest
+            docker push tr3mo89/udacity-capstone:latest
 
 workflows:
   application-pipeline:
