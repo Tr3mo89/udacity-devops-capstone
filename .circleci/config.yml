@@ -68,10 +68,11 @@ jobs:
   
   build_image:
     docker:
-      - image: cimg/python:3.8.11
+      - image: tr3mo89/ubuntu-20.04-docker
     steps:
       - checkout
-      #- install-docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run: 
           name: build image
           command: |
@@ -84,6 +85,8 @@ jobs:
     steps:
       - checkout
       #- install-docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
           name: set dockerpath
           command: |
@@ -104,5 +107,5 @@ workflows:
       - linting
       - build_image #:
           #requires: [linting]  #### increase deployment speed
-      - push_image:
-          requires: [build_image]
+      - push_image #:
+          # requires: [build_image]
