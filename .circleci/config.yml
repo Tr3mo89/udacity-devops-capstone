@@ -53,7 +53,7 @@ jobs:
   
   build_image:
     docker:
-      - image: tr3mo89/ubuntu-20.04-docker:latest
+      - image: circleci/docker@1.7.0
     steps:
       - checkout
       #- install-docker
