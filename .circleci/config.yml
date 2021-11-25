@@ -76,7 +76,7 @@ jobs:
       - run:
           name: set dockerpath
           command: |
-            dockerpath="tr3mo89/udacity-capstone"
+            export dockerpath="tr3mo89/udacity-capstone"
       - run: 
           name: build image
           command: |
