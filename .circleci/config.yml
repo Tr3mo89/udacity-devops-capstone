@@ -33,6 +33,18 @@ commands:
             apt-get update
             apt-get install -y docker-ce docker-ce-cli containerd.io
             docker --version
+  start-docker-daemon:
+    description: start docker deamon
+    steps:
+      - run:
+          name: start docker daemon
+          command: |
+            systemctl daemon-reload
+            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
+            systemctl restart docker
+            systemctl status docker
+            docker --version
+
 
 jobs:
   linting:
@@ -60,14 +72,6 @@ jobs:
     steps:
       - checkout
       #- install-docker
-      - run:
-          name: start docker daemon
-          command: |
-            systemctl daemon-reload
-            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
-            systemctl restart docker
-            systemctl status docker
-            docker --version
       - run: 
           name: build image
           command: |
@@ -76,7 +80,7 @@ jobs:
   
   push_image:
     docker:
-      - image: tr3mo89/ubuntu-20.04-docker:latest
+      - image: cimg/python:3.8.11
     steps:
       - checkout
       #- install-docker
@@ -84,14 +88,6 @@ jobs:
           name: set dockerpath
           command: |
             dockerpath="tr3mo89/udacity-capstone"
-      - run:
-          name: start docker daemon
-          command: |
-            systemctl daemon-reload
-            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
-            systemctl restart docker
-            systemctl status docker
-            docker --version
       - run: 
           name: tag_image
           command: |
