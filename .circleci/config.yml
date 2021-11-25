@@ -60,7 +60,7 @@ jobs:
       - run: 
           name: build image
           command: |
-            ls -la
+            dockerd
             docker build -t udacity/flask:latest .
   
   
@@ -74,6 +74,9 @@ jobs:
           name: set dockerpath
           command: |
             dockerpath="tr3mo89/udacity-capstone"
+      - run:
+          name: start docker daemon
+          command: dockerd
       - run: 
           name: tag_image
           command: |
