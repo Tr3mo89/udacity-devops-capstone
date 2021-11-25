@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@2.0.1
+
 commands:
   install-dependencies:
     description: install dependencies
@@ -60,7 +63,7 @@ jobs:
       - run:
           name: start docker daemon
           command: |
-            systemct daemon-reload
+            systemctl daemon-reload
             ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
             systemctl restart docker
             systemctl status docker
@@ -84,7 +87,7 @@ jobs:
       - run:
           name: start docker daemon
           command: |
-            systemct daemon-reload
+            systemctl daemon-reload
             ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
             systemctl restart docker
             systemctl status docker
