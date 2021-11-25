@@ -13,38 +13,6 @@ commands:
             pip install --upgrade pip && pip install -r requirements.txt
             pip install cython
             pip install pandas
-  install-docker:
-    description: install docker
-    steps:
-      - run:
-          name: install docker
-          command: |
-            DEBIAN_FRONTEND=noninteractive
-            apt-get update
-            apt-get install -y \
-              ca-certificates \
-              curl \
-              gnupg \
-              lsb-release
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-            echo \
-              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-              $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-            apt-get update
-            apt-get install -y docker-ce docker-ce-cli containerd.io
-            docker --version
-  start-docker-daemon:
-    description: start docker deamon
-    steps:
-      - run:
-          name: start docker daemon
-          command: |
-            systemctl daemon-reload
-            ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
-            systemctl restart docker
-            systemctl status docker
-            docker --version
-
 
 jobs:
   linting:
@@ -73,24 +41,22 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 20.10.7
-      - run:
-          name: set dockerpath
-          command: |
-            export dockerpath="tr3mo89/udacity-capstone"
-            echo $dockerpath
       - run: 
           name: build image
           command: |
-            echo "dockerpath: " $dockerpath
-            docker build -t tr3mo89/udacity-capstone:latest .
+            docker build -t $dockerpath:latest .
       - run: 
           name: tag image
           command: |
-            docker tag tr3mo89/udacity-capstone:latest tr3mo89/udacity-capstone:latest
+            docker tag $dockerpath:latest $dockerpath:latest
+      - run:
+          name: login to dockerhub
+          command: |
+            docker login -u $dockerId -p $dockerAuth
       - run:
           name: push image
           command: |
-            docker push tr3mo89/udacity-capstone:latest
+            docker push $dockerpath:latest
 
 workflows:
   application-pipeline:
