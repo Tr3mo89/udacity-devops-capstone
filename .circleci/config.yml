@@ -20,27 +20,21 @@ jobs:
       - image: python:3.7.3-stretch
     steps:
       - checkout
-      # - install-dependencies
-      #- run:
-      #    name: install lint
-      #    command: |
-      #      wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
-      #      chmod +x /bin/hadolint
-      #      hadolint --version
+      - install-dependencies
       - run:
-          name: install dependencies
+          name: install lint
           command: |
-            python3 -m venv ~/.capstone
-            source ~/.capstone/bin/activate
-            make install
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+            chmod +x /bin/hadolint
+            hadolint --version
       - run:
           name: run lint
           command: |
             make lint
-      - save_cache:
-          paths:
-            - ./.capstone  
-          key: v1-dependencies-{{ checksum "hello_app/requirements.txt" }}
+     # - save_cache:
+     #     paths:
+     #       - ./.capstone  
+     #     key: v1-dependencies-{{ checksum "hello_app/requirements.txt" }}
 
   
   handle_docker_image:
