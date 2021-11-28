@@ -102,13 +102,15 @@ jobs:
       - install-minikube
       - install-eksctl
       - run:
-          name: start minikube
-          command: minikube start
-      - run:
-          name: run flask app
+          name: create cluster
           command: |
-            kubectl run flask --image=$dockerpath --port=8000
-            kubectl port-forward flask 8000:80
+            ./bin/eksctl create cluster \
+              --name hello-app \
+              --ssh-access
+              --ssh-public-key udacity \
+              --managed \
+              --with-oidc \
+              --region $AWS_DEFAULT_REGION
 
 
 workflows:
