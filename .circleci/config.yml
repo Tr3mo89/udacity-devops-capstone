@@ -14,7 +14,7 @@ commands:
             pip install cython
             pip install pandas
   install-kubectl:
-    decription: install kubectl
+    description: install kubectl
     steps:
       - run:
           name: install kubectl
