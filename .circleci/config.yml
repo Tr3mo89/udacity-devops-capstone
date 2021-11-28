@@ -25,6 +25,7 @@ commands:
             echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
             apt-get update
             apt-get install -y kubectl
+            kubectl version
   install-minikube:
     description: install minikube
     steps:
@@ -34,6 +35,16 @@ commands:
             curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
               && chmod +x minikube
             cp minikube /usr/local/bin && rm minikube
+            minikube version
+  install-eksctl:
+    description: install eksctl on ubuntu
+    steps:
+      - run:
+          name: install eksctl
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            mv /tmp/eksctl /usr/local/bin
+            eksctl version
 
 jobs:
   linting:
@@ -89,6 +100,7 @@ jobs:
       - checkout
       - install-kubectl
       - install-minikube
+      - install-eksctl
 
 workflows:
   application-pipeline:
