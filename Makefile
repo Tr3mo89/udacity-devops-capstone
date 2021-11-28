@@ -28,4 +28,5 @@ lint:
 push:
 	sh ./scripts/docker_push.sh
 
+
 all: setup install lint test 

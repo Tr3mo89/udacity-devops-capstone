@@ -27,16 +27,11 @@ jobs:
       #      wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
       #      chmod +x /bin/hadolint
       #      hadolint --version
-      #- run: 
-      #    name: lint the dockerfile
-      #    command: |
-      #      pwd
-      #      ls -la
-      #      make lint
       - run:
           name: install dependencies
           command: |
-            make setup
+            python3 -m venv ~/.capstone
+            source ~/.capstone/bin/activate
             make install
       - run:
           name: run lint
