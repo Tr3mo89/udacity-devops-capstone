@@ -1,19 +1,17 @@
 setup:
 	# Create python virtualenv & source it
-	python3 -m venv ~/.capstone
-	source ~/.capstone/bin/activate
-	
+	python3 -m venv ~/.devops
+	source ~/.devops/bin/activate
 
 install:
 	# This should be run from inside a virtualenv
-	pip install --upgrade pip && pip install -r requirements.txt
-    pip install cython
-    pip install pandas
-
-	### Install hadolint
-	wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
-    chmod +x /bin/hadolint
-    hadolint --version
+	pip install --upgrade pip &&\
+		pip install -r requirements.txt
+	pip install cython
+	pip install pandas
+	# Install hadolint
+	wget -O ./hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+	chmod +x ./hadolint
 
 test:
 	# Additional, optional, tests could go here
@@ -28,5 +26,4 @@ lint:
 push:
 	sh ./scripts/docker_push.sh
 
-
-all: setup install lint test 
+all: install lint test
