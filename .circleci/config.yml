@@ -104,13 +104,7 @@ jobs:
       - run:
           name: create cluster
           command: |
-            eksctl create cluster \
-              --name hello-app \
-              --ssh-access
-              --ssh-public-key udacity \
-              --managed \
-              --with-oidc \
-              --region $AWS_DEFAULT_REGION
+            eksctl create cluster --config-file=cluster.yml
 
 
 workflows:

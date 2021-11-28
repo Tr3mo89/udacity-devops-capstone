@@ -1,0 +1,21 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: app
+  region: eu-central-1
+
+iam:
+  withOIDC: true
+
+nodeGroups:
+  - name: flask-hello-app
+    instanceType: t2.small
+    amiFamily: AmazonLinux2
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
+    volumeSize: 80
+    ssh:
+      allow: true
+      publicKeyName: udacity
