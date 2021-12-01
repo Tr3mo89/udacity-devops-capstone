@@ -104,7 +104,7 @@ jobs:
       - run:
           name: create cluster
           command: |
-            eksctl create cluster --config-file=cluster.yml
+            eksctl create cluster --config-file=cluster-green.yml
 
   kubernetes_deployment:
     docker:
@@ -113,22 +113,26 @@ jobs:
       - checkout
       - install-kubectl
       - run:
-          name: sd
-          command: |
-            kubectl create deployment hello-app --image=$dockerpath:latest --replicas=2
-            kubectl expose deployment/hello-app --type="LoadBalancer" --port 80
-      - run:
-          name: Get Kubernetes Resources
-          command: |
-            kubectl get deployments
-            kubectl get services
-            kubectl get pods
+          name: connect to eks cluster
+          command: | 
+            aws eks --region eu-central-1 update-kubeconfig --name hello-app
+            kubectl get svc
+      #- run:
+      #    name: sd
+      #    command: |
+      #      kubectl create deployment hello-app --image=$dockerpath:latest --replicas=2
+      #      kubectl expose deployment/hello-app --type="LoadBalancer" --port 80
+      #- run:
+      #    name: Get Kubernetes Resources
+      #    command: |
+      #      kubectl get deployments
+      #      kubectl get services
+      #      kubectl get pods
 
 workflows:
   application-pipeline:
     jobs:
       #- linting
       #- handle_docker_image
-      - eks_create_cluster 
-      - kubernetes_deployment:
-          requires: [eks_create_cluster]
+      # - eks_create_cluster 
+      - kubernetes_deployment
