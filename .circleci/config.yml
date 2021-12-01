@@ -114,7 +114,7 @@ jobs:
       - run:
           name: create cluster
           command: |
-            eksctl create cluster --config-file=cluster-green.yml
+            eksctl create cluster --config-file=cluster.yml
 
   kubernetes_deployment:
     docker:
@@ -128,6 +128,14 @@ jobs:
           command: | 
             aws eks --region eu-central-1 update-kubeconfig --name hello-app
             kubectl get svc
+      - run: 
+          name: deploy app
+          command: |
+            kubectl apply -f deployment.yml 
+            echo "List Services:"
+            kubectl get svc
+            echo "List Pods:"
+            kubectl get pods
       #- run:
       #    name: sd
       #    command: |
