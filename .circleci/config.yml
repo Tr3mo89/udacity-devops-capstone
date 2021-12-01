@@ -132,10 +132,18 @@ jobs:
           name: deploy app
           command: |
             kubectl apply -f deployment.yml 
+      - run:
+          name: list kubectl resources
+          command: |
+            echo "List Deployments:"
+            kubectl get deployments
+            echo ""
             echo "List Services:"
             kubectl get svc
+            echo ""
             echo "List Pods:"
             kubectl get pods
+
       #- run:
       #    name: sd
       #    command: |
