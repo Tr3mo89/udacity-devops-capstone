@@ -161,5 +161,5 @@ workflows:
            requires: [lint_dockerfile]
       - create_eks_cluster:
            requires: [publish_docker_image]
-      - deploy_kubernetes_app #:
-      #     requires: [create_eks_cluster]
+      - deploy_kubernetes_app:
+           requires: [create_eks_cluster]
