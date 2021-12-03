@@ -11,8 +11,6 @@ commands:
           name: install dependencies
           command: |
             pip install --upgrade pip && pip install -r requirements.txt
-            pip install cython
-            pip install pandas
   install-kubectl:
     description: install kubectl
     steps:
@@ -25,17 +23,7 @@ commands:
             echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
             apt-get update
             apt-get install -y kubectl
-           #  kubectl version
-  install-minikube:
-    description: install minikube
-    steps:
-      - run:
-          name: install minikube
-          command: |
-            curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
-              && chmod +x minikube
-            cp minikube /usr/local/bin && rm minikube
-            minikube version
+            kubectl version
   install-eksctl:
     description: install eksctl on ubuntu
     steps:
@@ -55,6 +43,14 @@ commands:
             unzip awscliv2.zip
             ./aws/install
             aws --version
+  destroy_cluster:
+    description: destroy eks cluster
+    steps:
+      - run:
+          name: destroy cluster
+          when: on_fail
+          command: |
+            eksctl delete cluster --name $CLUSTER_NAME
 
 jobs:
   lint_dockerfile:
@@ -73,11 +69,6 @@ jobs:
           name: run lint
           command: |
             make lint
-     # - save_cache:
-     #     paths:
-     #       - ./.capstone  
-     #     key: v1-dependencies-{{ checksum "hello_app/requirements.txt" }}
-
   
   publish_docker_image:
     docker:
@@ -113,7 +104,7 @@ jobs:
       - run:
           name: create cluster
           command: |
-            aws eks describe-cluster --name hello-app > /dev/null
+            aws eks describe-cluster --name $CLUSTER_NAME > /dev/null
             if [ $? -eq 0 ]
             then
               echo "Cluster already exists"
@@ -121,12 +112,7 @@ jobs:
               echo "Create Cluster"
               eksctl create cluster --config-file=cluster.yml
             fi 
-            
-      #- run:
-      #    name: create cluster via ansible
-      #    command: |
-      #      cd .circleci/ansible
-      #      ansible-playbook -i inventory.txt deploy-infrastructure.yml -vvv
+      - destroy_cluster
 
   deploy_kubernetes_app:
     docker:
@@ -166,8 +152,7 @@ workflows:
       - lint_dockerfile
       - publish_docker_image:
            requires: [lint_dockerfile]
-      - create_eks_cluster #:
-      #     requires: [publish_docker_image]
-      # - deploy_kubernetes_app:
-      #     requires: [create_eks_cluster]
-      - deploy_kubernetes_app
+      - create_eks_cluster:
+           requires: [publish_docker_image]
+      - deploy_kubernetes_app:
+           requires: [create_eks_cluster]
