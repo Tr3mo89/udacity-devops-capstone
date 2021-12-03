@@ -21,37 +21,3 @@ A basic python app is deployed to a kubernetes cluster running on AWS EKS. Conta
 ## Update Option => Rolling Update
 If a new version of the app is available set the VERSION variable in the CircleCI environment variables accordingly and trigger the deployment. 
 With the command `kubectl set image deployment.apps/udastone-deployment udacity-capstone=$dockerpath:$VERSION` the update will be done.
-
-
-
-## Setup the environment
-1. create and activate an environemnt
-
-`python3 -m venv ~/.capstone`
-`source ~/.capstone/bin/activate`
-
-
-## Software to install
-python
-hadolint
-
-## Using docker in jobs:
-https://circleci.com/docs/2.0/building-docker-images/
-
-
-## Blue-Green-Deployment based on the Version
-
-=> deployment via kubectl und nicht via eks
-=> eks bestehen lassen und oder vorher hoch fahren
-
-=> Deploy v1.0.0 "blue"
-=> Deploy v1.1.0 "green"
-=> Destroy v1.0.0 "blue"
-
-Steps:
-lint
-handle docker
-install kubectl, eksctl
-create cluster
-
-## kubectl apply => declarative approach
