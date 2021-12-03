@@ -5,9 +5,8 @@ from flask import Flask, escape, request
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    name = request.args.get("name", "World [ 3 ]")
-    return f'Hello, {escape(name)}!'
+def helloWorld():
+    return "<h2>Hello Student!</h2><br><h3>This is my DevOps Capstone Project, Greetings Felix</h3>"
 
 
 if __name__ == '__main__':

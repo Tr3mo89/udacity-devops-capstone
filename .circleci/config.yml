@@ -57,7 +57,7 @@ commands:
             aws --version
 
 jobs:
-  linting:
+  lint_dockerfile:
     docker:
       - image: python:3.7.3-stretch
     steps:
@@ -79,7 +79,7 @@ jobs:
      #     key: v1-dependencies-{{ checksum "hello_app/requirements.txt" }}
 
   
-  handle_docker_image:
+  publish_docker_image:
     docker:
       - image: tr3mo89/ubuntu-20.04-docker
     steps:
@@ -103,7 +103,7 @@ jobs:
           command: |
             docker push $dockerpath:latest
 
-  eks_create_cluster:
+  create_eks_cluster:
     docker:
       - image: tr3mo89/ubuntu-20.04-docker
     steps:
@@ -116,7 +116,7 @@ jobs:
           command: |
             eksctl create cluster --config-file=cluster.yml
 
-  kubernetes_deployment:
+  deploy_kubernetes_app:
     docker:
       - image: tr3mo89/ubuntu-20.04-docker
     steps:
@@ -159,7 +159,11 @@ jobs:
 workflows:
   application-pipeline:
     jobs:
-      #- linting
-      #- handle_docker_image
-      # - eks_create_cluster 
-      - kubernetes_deployment
+      - lint_dockerfile
+      - publish_docker_image:
+           requires: [lint_dockerfile]
+      # - create_eks_cluster:
+      #     requires: [publish_docker_image]
+      # - deploy_kubernetes_app:
+      #     requires: [create_eks_cluster]
+      - deploy_kubernetes_app
