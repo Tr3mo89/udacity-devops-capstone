@@ -1,11 +1,11 @@
 
-from flask import Flask, escape, request
+from flask import Flask
 
 ## Start flask app
 app = Flask(__name__)
 
 @app.route('/')
-def helloWorld():
+def helloStudents():
     return "<h2>Hello Student!</h2><br><h3>This is my DevOps Capstone Project, Greetings Felix</h3>"
 
 
