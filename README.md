@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Tr3mo89/udacity-devops-capstone.svg?style=svg&circle-token=b1c039fb5762076e7d50429ddd7d2cea060542a6)]
+![CircleCI](https://circleci.com/gh/Tr3mo89/udacity-devops-capstone.svg?style=svg&circle-token=b1c039fb5762076e7d50429ddd7d2cea060542a6)
 # Udacity - Cloud DevOps Engineer - Capstone
 
 ## Description
