@@ -113,7 +113,7 @@ jobs:
       - run:
           name: create cluster
           command: |
-            aws eks describe-cluster --name hello-app
+            aws eks describe-cluster --name hello-app > /dev/null
             if [ $? -eq 0 ]
             then
               echo "Cluster already exists"
@@ -166,8 +166,8 @@ workflows:
       - lint_dockerfile
       - publish_docker_image:
            requires: [lint_dockerfile]
-      - create_eks_cluster:
-           requires: [publish_docker_image]
+      - create_eks_cluster #:
+      #     requires: [publish_docker_image]
       # - deploy_kubernetes_app:
       #     requires: [create_eks_cluster]
       - deploy_kubernetes_app
