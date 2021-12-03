@@ -79,11 +79,11 @@ jobs:
       - run: 
           name: build image
           command: |
-            docker build -t $dockerpath:latest .
+            docker build -t $dockerpath:$VERSION .
       - run: 
           name: tag image
           command: |
-            docker tag $dockerpath:latest $dockerpath:latest
+            docker tag $dockerpath:$VERSION $dockerpath:$VERSION
       - run:
           name: login to dockerhub
           command: |
@@ -91,7 +91,7 @@ jobs:
       - run:
           name: push image
           command: |
-            docker push $dockerpath:latest
+            docker push $dockerpath:$VERSION
 
   create_eks_cluster:
     docker:
@@ -134,6 +134,14 @@ jobs:
           command: | 
             kubectl rollout status deployment.apps/udastone-deployment
       - run:
+          name: rolling update
+          command: |
+            kubectl set image deployment.apps/udastone-deployment udacity-capstone=$dockerpath:$VERSION
+      - run:
+          name: watch rollout
+          command: | 
+            kubectl rollout status deployment.apps/udastone-deployment
+      - run:
           name: list kubectl resources
           command: |
             echo "List Deployments:"
@@ -153,5 +161,5 @@ workflows:
            requires: [lint_dockerfile]
       - create_eks_cluster:
            requires: [publish_docker_image]
-      - deploy_kubernetes_app:
-           requires: [create_eks_cluster]
+      - deploy_kubernetes_app #:
+      #     requires: [create_eks_cluster]
